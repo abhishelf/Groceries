@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:grocery/screen/HomePage.dart';
 import 'package:grocery/screen/LoginPage.dart';
 import 'package:grocery/screen/SignupPage.dart';
+import 'package:grocery/screen/SplashPage.dart';
+import 'package:grocery/util/DependencyInjection.dart';
+import 'package:grocery/util/DependencyInjection.dart';
 import 'package:grocery/util/String.dart';
 
-void main() => runApp(GroceryApp());
+void main(){
+  Injector.configure(Flavor.MOCK);
+  runApp(GroceryApp());
+}
 
 class GroceryApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +23,7 @@ class GroceryApp extends StatelessWidget {
         primarySwatch: Colors.lightGreen,
       ),
       title: APP_TITLE,
-      home: LoginPage(),
+      home: SplashPage(),
     );
   }
 }

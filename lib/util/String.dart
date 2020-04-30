@@ -1,4 +1,5 @@
 const String APP_TITLE = "Grocery App";
+const String RS = "₹ ";
 
 const String LOGIN_TITLE = "Welcome\nback";
 const String LOGIN_SUB_TITLE = "Sign in to continue";
@@ -13,3 +14,8 @@ const String SIGNUP_SUBTITLE = "Sign up to start shopping";
 const String LOGIN_SIGNUP_BUTTON = "Already Have An Account?  ";
 const String EMAIL_ERROR = "Enter valid email";
 const String PASSWORD_ERROR = "Password should At least 6 char";
+
+enum SORT { priceHigh, priceLow, name}
+
+const String PROFILE_TITLE = "Profile";
+const String PROCEED_CART = "Continue";

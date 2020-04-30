@@ -4,10 +4,16 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grocery/modal/Grocery.dart';
+import 'package:grocery/modal/Profile.dart';
 import 'package:grocery/util/MyNaigator.dart';
 import 'package:grocery/util/String.dart';
 
 class LoginPage extends StatefulWidget {
+  final List<Grocery> grocery;
+  final Profile profile;
+
+  LoginPage({Key key,this.grocery, this.profile}): super(key: key);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -60,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
       Timer(Duration(seconds: 5), () {
         setState(() {
           _showSnackBar(true, "Login Failed");
-          MyNavigator.goToHomePage(context);
+          MyNavigator.goToHomePage(context,widget.grocery,widget.profile);
           _isLoading = false;
         });
       });
