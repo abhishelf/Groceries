@@ -1,76 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:grocery/db/DatabaseHelper.dart';
 import 'package:grocery/modal/Cart.dart';
-import 'package:grocery/modal/Grocery.dart';
 import 'package:grocery/modal/Wishlist.dart';
 import 'package:grocery/util/String.dart';
 
-class HomeScreen extends StatefulWidget {
-  final List<Grocery> grocery;
-
-  HomeScreen({Key key, this.grocery}) : super(key: key);
-
+class WishlistScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _WishlistScreenState createState() => _WishlistScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _WishlistScreenState extends State<WishlistScreen> {
   DatabaseHelper _databaseHelper;
 
-  List<Grocery> _groceryList;
-  List<Cart> _cartList;
   List<Wishlist> _wishlist;
+  List<Cart> _cartList;
 
+  bool _isLoadingWishlist;
   bool _isLoadingCart;
-  bool _isLoadingWish;
-
-  void _addRemoveWishlist(Grocery grocery) async {
-    bool result = await _databaseHelper.getWishlistById(grocery.id);
-    if (result) {
-      await _databaseHelper.removeFromWishlist(grocery.id);
-    } else {
-      Wishlist wishlist = Wishlist(
-          id: grocery.id,
-          title: grocery.title,
-          image: grocery.image,
-          price: grocery.price,
-          quantity: grocery.price);
-      await _databaseHelper.addToWishlist(wishlist);
-    }
-
-    _getWishlist();
-  }
-
-  void _addRemoveCart(int index, String prvQ, int nextQ) async {
-    int quant = int.parse(prvQ);
-    if (quant == 0) {
-      Cart cart = Cart(
-          id: _groceryList[index].id,
-          title: _groceryList[index].title,
-          quantity: _groceryList[index].quantity,
-          price: _groceryList[index].price,
-          image: _groceryList[index].image,
-          q: "1");
-      var result = await _databaseHelper.insertCartItem(cart);
-      _getCartList();
-    } else {
-      quant += nextQ;
-      Cart cart = Cart(
-          id: _groceryList[index].id,
-          title: _groceryList[index].title,
-          quantity: _groceryList[index].quantity,
-          price: _groceryList[index].price,
-          image: _groceryList[index].image,
-          q: quant.toString());
-      if (quant == 0) {
-        var result = await _databaseHelper.deleteCartItem(cart.id);
-      } else {
-        var result = await _databaseHelper.updateCartItem(cart);
-      }
-      _getCartList();
-    }
-  }
 
   void _getCartList() async {
     var cartList = await _databaseHelper.getCartList();
@@ -81,58 +27,98 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _getWishlist() async {
-    var wishlist = await _databaseHelper.getWishlist();
+    List<Wishlist> result = await _databaseHelper.getWishlist();
     setState(() {
-      this._wishlist = wishlist;
-      _isLoadingWish = false;
+      _wishlist = result;
+      _isLoadingWishlist = false;
     });
+  }
+
+  void _removeWishlist(int index) async {
+    var result = await _databaseHelper.removeFromWishlist(_wishlist[index].id);
+    setState(() {
+      _wishlist.removeAt(index);
+    });
+  }
+
+  void _addRemoveCart(int index, String prvQ, int nextQ) async {
+    int quant = int.parse(prvQ);
+    if (quant == 0) {
+      Cart cart = Cart(
+          id: _wishlist[index].id,
+          title: _wishlist[index].title,
+          quantity: _wishlist[index].quantity,
+          price: _wishlist[index].price,
+          image: _wishlist[index].image,
+          q: "1");
+      var result = await _databaseHelper.insertCartItem(cart);
+      _getCartList();
+    } else {
+      quant += nextQ;
+      Cart cart = Cart(
+          id: _wishlist[index].id,
+          title: _wishlist[index].title,
+          quantity: _wishlist[index].quantity,
+          price: _wishlist[index].price,
+          image: _wishlist[index].image,
+          q: quant.toString());
+      if (quant == 0) {
+        var result = await _databaseHelper.deleteCartItem(cart.id);
+      } else {
+        var result = await _databaseHelper.updateCartItem(cart);
+      }
+      _getCartList();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _groceryList = widget.grocery;
     _databaseHelper = DatabaseHelper();
+    _isLoadingWishlist = true;
     _isLoadingCart = true;
-    _isLoadingWish = true;
-    _getCartList();
     _getWishlist();
+    _getCartList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          APP_TITLE,
-          style: TextStyle(
-            color: Colors.white,
+        title: Container(
+          padding: EdgeInsets.only(top: 32.0, bottom: 22.0),
+          child: Text(
+            CART_TITLE,
+            style: TextStyle(color: Colors.white, fontSize: 22.0),
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.sort,
-                color: Colors.white,
-              ))
-        ],
       ),
-      body: _isLoadingCart || _isLoadingWish
+      body: _isLoadingWishlist || _isLoadingCart
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ListView.builder(
-              itemCount: _groceryList.length,
-              itemBuilder: (context, index) {
-                return _getGroceryListItem(index);
-              },
-            ),
+          : _wishlist.length == null || _wishlist.length == 0
+              ? Center(
+                  child: Text(
+                    WISHLIST_EMPTY,
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 16.0),
+                  ),
+                )
+              : ListView.builder(
+                  padding: EdgeInsets.only(bottom: 64.0),
+                  itemCount: _wishlist.length,
+                  itemBuilder: (context, index) {
+                    return _getWishlistItem(index);
+                  },
+                ),
     );
   }
 
-  Widget _getGroceryListItem(int index) {
+  Widget _getWishlistItem(int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -150,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 48,
-                    backgroundImage: AssetImage(_groceryList[index].image),
+                    backgroundImage: AssetImage(_wishlist[index].image),
                   ),
                   Container(
                     padding:
@@ -161,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(12.0)),
                     ),
                     child: Text(
-                      _groceryList[index].quantity,
+                      _wishlist[index].quantity,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -180,14 +166,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        _groceryList[index].title,
+                        _wishlist[index].title,
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 16.0,
                             fontWeight: FontWeight.normal),
                       ),
                       Text(
-                        RS + _groceryList[index].price,
+                        RS + _wishlist[index].price,
                         style: TextStyle(
                           fontSize: 14.0,
                           color: Colors.blueGrey,
@@ -201,9 +187,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             GestureDetector(
-                              child: _getWishListIcon(index),
+                              child: Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                              ),
                               onTap: () {
-                                _addRemoveWishlist(_groceryList[index]);
+                                _removeWishlist(index);
                               },
                             ),
                             _getCartLayout(index),
@@ -224,33 +213,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-
-  Widget _getWishListIcon(int index) {
-    if (_wishlist == null) {
-      return Icon(
-        Icons.favorite_border,
-        color: Colors.green,
-      );
-    }
-
-    for (int i = 0; i < _wishlist.length; i++) {
-      if (_wishlist[i].id == _groceryList[index].id) {
-        return Icon(
-          Icons.favorite,
-          color: Colors.red,
-        );
-      }
-    }
-
-    return Icon(
-      Icons.favorite_border,
-      color: Colors.green,
-    );
-  }
-
+  
   Widget _getCartLayout(int index) {
     for (int i = 0; i < _cartList.length; i++) {
-      if (_cartList[i].id == _groceryList[index].id) {
+      if (_cartList[i].id == _wishlist[index].id) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,

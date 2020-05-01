@@ -6,6 +6,8 @@ import 'package:grocery/screen/CartScreen.dart';
 import 'package:grocery/screen/HomeScreen.dart';
 import 'package:grocery/screen/ProfileScreen.dart';
 
+import 'WishlistScreen.dart';
+
 class HomePage extends StatefulWidget {
   final List<Grocery> grocery;
   final Profile profile;
@@ -36,8 +38,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     pageList = [
       HomeScreen(grocery: widget.grocery),
-      HomeScreen(),
-      CartScreen(profile: widget.profile),
+      WishlistScreen(),
+      CartScreen(),
       ProfileScreen(profile: widget.profile),
     ];
   }

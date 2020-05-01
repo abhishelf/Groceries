@@ -1,11 +1,12 @@
 class Grocery{
 
+  String id;
   String image;
   String title;
   String price;
   String quantity;
 
-  Grocery({this.image, this.title, this.price, this.quantity});
+  Grocery({this.id, this.image, this.title, this.price, this.quantity});
 }
 
 abstract class GroceryRepository {

@@ -19,3 +19,18 @@ enum SORT { priceHigh, priceLow, name}
 
 const String PROFILE_TITLE = "Profile";
 const String PROCEED_CART = "Continue";
+const String ADD_TO_CART = "Add To Cart";
+const String CART_EMPTY = "Your Cart Is Empty";
+const String WISHLIST_EMPTY = "You Do Not Added Any Item Yet";
+const String CART_TITLE = "Cart";
+
+const String COL_ID = "id";
+const String COL_IMAGE = "image";
+const String COl_TITLE = "title";
+const String COL_PRICE = "price";
+const String COL_QUANT = "quantity";
+const String COL_CART_Q = "q";
+
+const String DB_NAME = "grocery.db";
+const String TABLE_CART = "CartTable";
+const String TABLE_WISHLIST = "WishlistTable";
