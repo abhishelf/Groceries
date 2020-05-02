@@ -64,6 +64,12 @@ class DatabaseHelper {
     return result;
   }
 
+  Future<int> deleteCart() async {
+    Database db = await this.database;
+    var result = await db.rawDelete('DELETE FROM $TABLE_CART');
+    return result;
+  }
+
   Future<List<Map<String, dynamic>>> getCartMapList() async {
     Database db = await this.database;
     var result = await db.rawQuery('Select * from $TABLE_CART order by $COL_CART_Q ASC');

@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/modal/Profile.dart';
 import 'package:grocery/presenter/GroceryPresenter.dart';
-import 'package:grocery/presenter/ProfilePresenter.dart';
 import 'package:grocery/util/MyNaigator.dart';
 
 class SplashPage extends StatefulWidget {
@@ -12,13 +10,10 @@ class SplashPage extends StatefulWidget {
   _SplashPageState createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> implements GroceryListViewContract, ProfileViewContract{
+class _SplashPageState extends State<SplashPage> implements GroceryListViewContract{
 
   GroceryPresenter _groceryPresenter;
   List<Grocery> _groceryList;
-
-  ProfilePresenter _profilePresenter;
-  Profile _profile;
 
   bool _isLoading = true;
   bool _isTimerFinished = false;
@@ -26,7 +21,6 @@ class _SplashPageState extends State<SplashPage> implements GroceryListViewContr
   String _loadingText = "Loading";
 
   _SplashPageState(){
-    _profilePresenter = ProfilePresenter(this);
     _groceryPresenter = GroceryPresenter(this);
   }
 
@@ -40,8 +34,8 @@ class _SplashPageState extends State<SplashPage> implements GroceryListViewContr
 
     Timer(Duration(seconds: 5), () {
       _isTimerFinished = true;
-      if(_profile != null){
-        MyNavigator.goToHomePage(context,_groceryList,_profile);
+      if(_groceryList != null){
+        MyNavigator.goToHomePage(context,_groceryList);
       }
     });
   }
@@ -62,17 +56,9 @@ class _SplashPageState extends State<SplashPage> implements GroceryListViewContr
   @override
   void onLoadGrocery(List<Grocery> groceryList) {
     _groceryList = groceryList;
-    _profilePresenter.loadProfile("abhishek.bitpatna@gmail.com");
-  }
-
-  @override
-  void onLoadProfile(Profile profile) {
-    setState(() {
+    if(_isTimerFinished){
       _isLoading = false;
-      _profile = profile;
-      if(_isTimerFinished){
-        MyNavigator.goToHomePage(context, _groceryList, _profile);
-      }
-    });
+      MyNavigator.goToHomePage(context, _groceryList);
+    }
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery/modal/Cart.dart';
 import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/modal/Profile.dart';
 import 'package:grocery/screen/HomePage.dart';
 import 'package:grocery/screen/LoginPage.dart';
+import 'package:grocery/screen/ShopPage.dart';
 import 'package:grocery/screen/SignupPage.dart';
 
 class MyNavigator {
@@ -13,15 +14,21 @@ class MyNavigator {
     ));
   }
 
-  static void goToLoginPage(BuildContext context,List<Grocery> grocery, Profile profile){
+  static void goToLoginPage(BuildContext context,List<Grocery> grocery){
     Navigator.pushReplacement(context, MaterialPageRoute(
       builder: (context) => LoginPage(),
     ));
   }
 
-  static void goToHomePage(BuildContext context,List<Grocery> grocery, Profile profile){
+  static void goToHomePage(BuildContext context,List<Grocery> grocery){
     Navigator.pushReplacement(context, MaterialPageRoute(
-      builder: (context) => HomePage(grocery: grocery,profile: profile),
+      builder: (context) => HomePage(grocery: grocery),
+    ));
+  }
+
+  static void goToShopPage(BuildContext context, List<Cart> cart){
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => ShopPage(cart: cart,),
     ));
   }
 }

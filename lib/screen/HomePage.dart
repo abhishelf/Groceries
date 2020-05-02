@@ -1,18 +1,16 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/modal/Profile.dart';
 import 'package:grocery/screen/CartScreen.dart';
+import 'package:grocery/screen/HistoryPage.dart';
 import 'package:grocery/screen/HomeScreen.dart';
-import 'package:grocery/screen/ProfileScreen.dart';
 
 import 'WishlistScreen.dart';
 
 class HomePage extends StatefulWidget {
   final List<Grocery> grocery;
-  final Profile profile;
 
-  HomePage({Key key,this.grocery, this.profile}): super(key: key);
+  HomePage({Key key,this.grocery}): super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -40,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       HomeScreen(grocery: widget.grocery),
       WishlistScreen(),
       CartScreen(),
-      ProfileScreen(profile: widget.profile),
+      HistoryPage(),
     ];
   }
 

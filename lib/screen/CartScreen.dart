@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/db/DatabaseHelper.dart';
 import 'package:grocery/modal/Cart.dart';
-import 'package:grocery/modal/Profile.dart';
+import 'package:grocery/util/MyNaigator.dart';
 import 'package:grocery/util/String.dart';
 
 class CartScreen extends StatefulWidget {
+
   @override
   _CartScreenState createState() => _CartScreenState();
 }
@@ -38,6 +39,10 @@ class _CartScreenState extends State<CartScreen> {
         _cartList[index] = _cartList[index];
       });
     }
+  }
+
+  void _continueShop(context){
+    MyNavigator.goToShopPage(context, _cartList);
   }
 
   @override
@@ -122,29 +127,34 @@ class _CartScreenState extends State<CartScreen> {
                     fontSize: 20.0,
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  decoration: BoxDecoration(
-                    color: Colors.orangeAccent,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        PROCEED_CART,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
+                GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.orangeAccent,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          PROCEED_CART,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_right,
-                        color: Colors.white,
-                      )
-                    ],
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
                   ),
+                  onTap:(){
+                    _continueShop(context);
+                  }
                 ),
               ],
             ),
@@ -243,7 +253,7 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget _getCartLayout(int index) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         IconButton(
