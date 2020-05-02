@@ -1,17 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grocery/modal/Grocery.dart';
-import 'package:firebase_database/firebase_database.dart';
 
-class FetchGroceryList extends GroceryRepository{
-
-  final databaseReference = FirebaseDatabase.instance.reference();
+class FetchGroceryList extends GroceryRepository {
+  final databaseReference = Firestore.instance;
 
   @override
-  Future<List<Grocery>> fetchGroceryList() {
+  Future<List<Grocery>> fetchGroceryList() async {
     List<Grocery> grocery = List();
-    databaseReference.once().then((DataSnapshot snapshot) {
-      print(snapshot.value);
-      return grocery;
-    });
-  }
 
+    await databaseReference
+        .collection("grocery")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      try {
+        snapshot.documents.forEach((f) {
+          Grocery g = Grocery(
+              id: f.documentID,
+              image: f.data['image'],
+              title: f.data['title'],
+              quantity: f.data['quantity'],
+              price: f.data['price']);
+          grocery.add(g);
+        });
+      } catch (error) {}
+    });
+
+    return grocery;
+  }
 }
