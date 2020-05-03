@@ -4,6 +4,7 @@ import 'package:grocery/modal/Grocery.dart';
 import 'package:grocery/screen/CartScreen.dart';
 import 'package:grocery/screen/HistoryPage.dart';
 import 'package:grocery/screen/HomeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'WishlistScreen.dart';
 
@@ -31,9 +32,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _saveEmail() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("EMAIL", "7050316935");
+  }
+
   @override
   void initState() {
     super.initState();
+    _saveEmail();
     pageList = [
       HomeScreen(grocery: widget.grocery),
       WishlistScreen(),

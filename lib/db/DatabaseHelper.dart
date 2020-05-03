@@ -70,6 +70,12 @@ class DatabaseHelper {
     return result;
   }
 
+  Future<int> deleteWishlist() async {
+    Database db = await this.database;
+    var result = await db.rawDelete('DELETE FROM $TABLE_WISHLIST');
+    return result;
+  }
+
   Future<List<Map<String, dynamic>>> getCartMapList() async {
     Database db = await this.database;
     var result = await db.rawQuery('Select * from $TABLE_CART order by $COL_CART_Q ASC');
@@ -121,7 +127,9 @@ class DatabaseHelper {
   Future<bool> getWishlistById(String id) async{
     Database db = await this.database;
     var result = await db.rawQuery('Select * from $TABLE_WISHLIST Where $COL_ID = $id');
-    if(result.length > 0) return true;
+    try{
+      if(result.length > 0) return true;
+    }catch(error){}
     return false;
   }
 

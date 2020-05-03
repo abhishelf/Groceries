@@ -22,8 +22,10 @@ class FetchGroceryList extends GroceryRepository {
               price: f.data['price']);
           grocery.add(g);
         });
-      } catch (error) {}
-    });
+      } catch (error) {
+        throw FetchDataException("Error While Fetching Grocery : [$error]");
+      }
+    }).catchError((error) => throw FetchDataException("Error While Fetching Grocery : [$error]"));
 
     return grocery;
   }

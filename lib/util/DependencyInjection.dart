@@ -1,8 +1,9 @@
 import 'package:grocery/mock/FetchGroceryMock.dart';
-import 'package:grocery/mock/FetchHistoryList.dart';
+import 'package:grocery/mock/FetchHistoryMockList.dart';
 import 'package:grocery/modal/Grocery.dart';
 import 'package:grocery/modal/Placed.dart';
 import 'package:grocery/network/FetchGroceryList.dart';
+import 'package:grocery/network/FetchHistoryList.dart';
 
 enum Flavor { MOCK, PROD }
 
@@ -33,9 +34,9 @@ class Injector {
   HistoryRepository get historyRepository {
     switch(_flavor){
       case Flavor.MOCK :
-         return FetchHistoryList();
+         return FetchHistoryMockList();
       default:
-        return null;
+        return FetchHistoryList();
     }
   }
 

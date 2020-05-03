@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/util/String.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -37,6 +38,7 @@ class _SignupPageState extends State<SignupPage> {
 
   void _submitForm() {
     if (_formKey.currentState.validate()) {
+      _saveEmail();
       setState(() {
         _isLoading = true;
       });
@@ -51,6 +53,11 @@ class _SignupPageState extends State<SignupPage> {
   
   void _loadLoginPage(context){
     Navigator.pop(context);
+  }
+
+  void _saveEmail() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("EMAIL", _emailController.toString());
   }
 
   @override

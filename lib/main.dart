@@ -8,7 +8,7 @@ import 'package:grocery/util/DependencyInjection.dart';
 import 'package:grocery/util/String.dart';
 
 void main(){
-  Injector.configure(Flavor.PROD);
+  Injector.configure(Flavor.MOCK);
   runApp(GroceryApp());
 }
 

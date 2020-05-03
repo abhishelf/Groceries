@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:grocery/modal/Grocery.dart';
 import 'package:grocery/util/MyNaigator.dart';
 import 'package:grocery/util/String.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   final List<Grocery> grocery;
@@ -60,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
+        _saveEmail();
       });
       Timer(Duration(seconds: 5), () {
         setState(() {
@@ -73,6 +75,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void _loadSignUpPage(context) {
     MyNavigator.goToSignUpPage(context);
+  }
+
+  void _saveEmail() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("EMAIL", _emailController.toString());
   }
 
   @override

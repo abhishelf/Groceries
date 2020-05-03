@@ -1,6 +1,6 @@
 import 'package:grocery/modal/Placed.dart';
 
-class FetchHistoryList implements HistoryRepository{
+class FetchHistoryMockList implements HistoryRepository{
 
   @override
   Future<List<History>> fetchHistoryList() {

@@ -26,17 +26,21 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoadingWish;
 
   void _addRemoveWishlist(Grocery grocery) async {
-    bool result = await _databaseHelper.getWishlistById(grocery.id);
-    if (result) {
-      await _databaseHelper.removeFromWishlist(grocery.id);
-    } else {
-      Wishlist wishlist = Wishlist(
-          id: grocery.id,
-          title: grocery.title,
-          image: grocery.image,
-          price: grocery.price,
-          quantity: grocery.price);
-      await _databaseHelper.addToWishlist(wishlist);
+    try{
+      bool result = await _databaseHelper.getWishlistById(grocery.id.toString());
+      if (result) {
+        await _databaseHelper.removeFromWishlist(grocery.id);
+      } else {
+        Wishlist wishlist = Wishlist(
+            id: grocery.id,
+            title: grocery.title,
+            image: grocery.image,
+            price: grocery.price,
+            quantity: grocery.price);
+        await _databaseHelper.addToWishlist(wishlist);
+      }
+    }catch(error){
+      print(error);
     }
 
     _getWishlist();
@@ -93,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _groceryList = widget.grocery;
     _databaseHelper = DatabaseHelper();
+//    _databaseHelper.deleteWishlist();
     _isLoadingCart = true;
     _isLoadingWish = true;
     _getCartList();
