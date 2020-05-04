@@ -288,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       color: Colors.orangeAccent,
       child: Text(
-        ADD_TO_CART,
+        TEXT_ADD_TO_CART,
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       shape: RoundedRectangleBorder(

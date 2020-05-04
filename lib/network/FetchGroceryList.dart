@@ -13,8 +13,8 @@ class FetchGroceryList extends GroceryRepository {
       try {
         snapshot.documents.forEach((f) {
           Grocery g = Grocery(
-              //FIXME change documenId to data['id']
-              id: f.documentID,
+              //FIXME
+              id: f.data['id'],
               image: f.data['image'],
               title: f.data['title'],
               quantity: f.data['quantity'],

@@ -77,7 +77,7 @@ class _CartScreenState extends State<CartScreen> {
         title: Container(
           padding: EdgeInsets.only(top: 32.0, bottom: 22.0),
           child: Text(
-            CART_TITLE,
+            TITLE_CART,
             style: TextStyle(color: Colors.white, fontSize: 22.0),
           ),
         ),
@@ -89,7 +89,7 @@ class _CartScreenState extends State<CartScreen> {
           : _cartList.length == null || _cartList.length == 0
               ? Center(
                   child: Text(
-                    CART_EMPTY,
+                    TEXT_CART_EMPTY,
                     style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class _CartScreenState extends State<CartScreen> {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            PROCEED_CART,
+                            TEXT_PROCEED_CART,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

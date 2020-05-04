@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/modal/History.dart';
 import 'package:grocery/presenter/HistoryPresenter.dart';
+import 'package:grocery/util/BaseAuth.dart';
 import 'package:grocery/util/DependencyInjection.dart';
+import 'package:grocery/util/MyNavigator.dart';
 import 'package:grocery/util/String.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -31,11 +33,23 @@ class _HistoryPageState extends State<HistoryPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ORDER_TITLE,
+          TITLE_ORDER_HISTORY,
           style: TextStyle(
             color: Colors.white,
           ),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Auth().signOut();
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
       body: _isLoading
           ? Center(
@@ -43,7 +57,7 @@ class _HistoryPageState extends State<HistoryPage>
             )
           : _historyList == null || _historyList.length == 0
               ? Center(
-                  child: Text(NONE_ERROR),
+                  child: Text(ERROR_NONE),
                 )
               : ListView.builder(
                   itemCount: _historyList.length,

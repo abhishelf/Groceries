@@ -1,34 +1,50 @@
 const String APP_TITLE = "Grocery App";
+
 const String RS = "₹ ";
 const String TOTAL = "Total : ";
 
 enum SORT { priceHigh, priceLow, name}
-enum AuthStatus {NOT_DETERMINED, NOT_LOGGED_IN, LOGGED_IN, }
 
-const String LOGIN_TITLE = "Welcome\nback";
-const String LOGIN_SUB_TITLE = "Sign in to continue";
-const String EMAIL_HINT = "Email";
-const String PASSWORD_HINT = "Password";
-const String FORGOT_PASSWORD = "Forgot Password?";
-const String LOGIN_BUTTON = "Sign in";
-const String SIGNUP_LOGIN_BUTTON = "Don't have an account?  ";
-const String SIGNUP_BUTTON = "Sign up";
-const String SIGNUP_TITLE = "Create\nAccount";
-const String SIGNUP_SUBTITLE = "Sign up to start shopping";
-const String LOGIN_SIGNUP_BUTTON = "Already Have An Account?  ";
-const String PROCEED_CART = "Continue";
-const String ADD_TO_CART = "Add To Cart";
-const String CART_EMPTY = "Your Cart Is Empty";
-const String WISHLIST_EMPTY = "You Do Not Added Any Item Yet";
-const String CART_TITLE = "Cart";
-const String ORDER_TITLE = "Order History";
+const String TITLE_LOGIN = "Welcome\nback";
+const String TITLE_SIGNUP = "Create\nAccount";
+const String TITLE_CART = "Cart";
+const String TITLE_ORDER_HISTORY = "Order History";
+const String TITLE_ORDER_PLACE = "Place Order";
 
-const String NONE_ERROR = "Nothing to show here";
-const String EMAIL_ERROR = "Enter valid email";
-const String PASSWORD_ERROR = "Password should At least 6 char";
-const String LOGIN_ERROR = "Login Failed !!!";
-const String SIGNUP_ERROR = "Signup Failed";
+const String STEP1_TITLE = "Details";
+const String STEP2_TITLE = "Payment";
+const String STEP3_TITLE = "Place Order";
 
+const String SUBTITLE_LOGIN = "Sign in to continue";
+const String SUBTITLE_SIGNUP = "Sign up to start shopping";
+
+const String HINT_EMAIL = "Email";
+const String HINT_PASSWORD = "Password";
+const String HINT_NAME = "Name";
+const String HINT_PHONE = "Contact Number";
+const String HINT_ADDRESS = "Shipping Address";
+
+const String BUTTON_FORGOT_PASSWORD = "Forgot Password?";
+const String BUTTON_LOGIN = "Sign in";
+const String BUTTON_SIGNUP_IN_LOGIN = "Don't have an account?  ";
+const String BUTTON_SIGNUP = "Sign up";
+const String BUTTON_LOGIN_IN_SIGNUP = "Already Have An Account?  ";
+
+const String TEXT_PROCEED_CART = "Continue";
+const String TEXT_ADD_TO_CART = "Add To Cart";
+const String TEXT_CART_EMPTY = "Your Cart Is Empty";
+const String TEXT_WISHLIST_EMPTY = "You Do Not Added Any Item Yet";
+const String TEXT_ORDER_PLACING = "Placing Your Order";
+const String TEXT_ORDER_PLACED = "Order Placed";
+const String TEXT_COD = "Cash On Delivery";
+
+const String ERROR_NONE = "Nothing to show here";
+const String ERROR_EMAIL = "Enter valid email";
+const String ERROR_PASSWORD = "Password should At least 6 char";
+const String ERROR_LOGIN = "Login Failed !!!";
+const String ERROR_SIGNUP = "Signup Failed";
+const String ERROR_ORDER = "Sorry For Inconvenience\n Error While Placing Order!\nYou can continue with your cart";
+const String ERROR_VALID = "Enter Valid Detail";
 
 const String COL_ID = "id";
 const String COL_IMAGE = "image";

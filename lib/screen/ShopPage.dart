@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/db/DatabaseHelper.dart';
 import 'package:grocery/modal/Cart.dart';
+import 'package:grocery/util/String.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +32,8 @@ class _ShopPageState extends State<ShopPage> {
   bool _isError = false;
 
   List<Step> step;
+
+  int _priceToPay = 0;
 
   next() {
     if (_currentIndex == 0) {
@@ -59,12 +62,24 @@ class _ShopPageState extends State<ShopPage> {
     setState(() => _currentIndex = step);
   }
 
+  String _getTotalPrice() {
+    int total = 0;
+    if (widget.cart == null) return total.toString();
+    for (int i = 0; i < widget.cart.length; i++) {
+      int q = int.parse(widget.cart[i].q);
+      int price = int.parse(widget.cart[i].price);
+      total += (q * price);
+    }
+    _priceToPay = total;
+    return total.toString();
+  }
+
   placeOrder() async {
     List<String> cart = List();
     for (int i = 0; i < widget.cart.length; i++) {
       String str = widget.cart[i].title +
           "@" +
-          widget.cart[i].price +
+          _getTotalPrice() +
           "@" +
           widget.cart[i].q +
           "@" +
@@ -74,7 +89,6 @@ class _ShopPageState extends State<ShopPage> {
       cart.add(str);
     }
 
-    String jsonCart = jsonEncode(cart);
     SharedPreferences pref = await SharedPreferences.getInstance();
     String email = pref.getString("EMAIL");
     String datePostfix = DateTime.now().millisecondsSinceEpoch.toString();
@@ -89,7 +103,7 @@ class _ShopPageState extends State<ShopPage> {
       'name': _name.text,
       'phone': _phone.text,
       'address': _address.text,
-      'cart': jsonCart,
+      'cart': cart,
       'date': formattedDate,
       'status': '0',
     }).then((_){
@@ -115,7 +129,7 @@ class _ShopPageState extends State<ShopPage> {
     super.initState();
     step = [
       Step(
-        title: Text("Info"),
+        title: Text(STEP1_TITLE),
         isActive: true,
         state: StepState.indexed,
         content: Column(
@@ -142,13 +156,13 @@ class _ShopPageState extends State<ShopPage> {
                     children: <Widget>[
                       TextFormField(
                         autofocus: false,
-                        decoration: InputDecoration(hintText: "Name"),
+                        decoration: InputDecoration(hintText: HINT_NAME),
                         keyboardType: TextInputType.text,
                         controller: _name,
                         enabled: !_isLoading,
                         validator: (value) {
-                          if (value == null || value == "")
-                            return "Enter Your Name";
+                          if (value == null || value.isEmpty)
+                            return ERROR_VALID;
                           return null;
                         },
                       ),
@@ -157,15 +171,15 @@ class _ShopPageState extends State<ShopPage> {
                       ),
                       TextFormField(
                         autofocus: false,
-                        decoration: InputDecoration(hintText: "Phone"),
+                        decoration: InputDecoration(hintText: HINT_PHONE),
                         keyboardType: TextInputType.phone,
                         controller: _phone,
                         enabled: !_isLoading,
                         validator: (value) {
-                          if (value == null || value == "")
-                            return "Enter Your Contact Number";
+                          if (value == null || value.isEmpty)
+                            return ERROR_VALID;
                           if (value.length != 10)
-                            return "Enter Valid Contact Number";
+                            return ERROR_VALID;
                           return null;
                         },
                       ),
@@ -175,14 +189,14 @@ class _ShopPageState extends State<ShopPage> {
                       TextFormField(
                         autofocus: false,
                         decoration:
-                            InputDecoration(hintText: "Shipping Address"),
+                            InputDecoration(hintText: HINT_ADDRESS),
                         keyboardType: TextInputType.text,
                         controller: _address,
                         maxLines: 5,
                         enabled: !_isLoading,
                         validator: (value) {
-                          if (value == null || value == "")
-                            return "Enter Your Shipping Address";
+                          if (value == null || value.isEmpty)
+                            return ERROR_VALID;
                           return null;
                         },
                       ),
@@ -195,12 +209,12 @@ class _ShopPageState extends State<ShopPage> {
         ),
       ),
       Step(
-        title: Text("Payment"),
+        title: Text(STEP2_TITLE),
         isActive: true,
         state: StepState.indexed,
         content: RadioListTile(
           title: Text(
-            "Cash On Delivery",
+            TEXT_COD,
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -212,7 +226,7 @@ class _ShopPageState extends State<ShopPage> {
         ),
       ),
       Step(
-        title: Text("Place Order"),
+        title: Text(STEP3_TITLE),
         isActive: true,
         state: StepState.indexed,
         content: Container(),
@@ -225,7 +239,7 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Place Order",
+          TITLE_ORDER_PLACE,
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -238,7 +252,7 @@ class _ShopPageState extends State<ShopPage> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Text(
-                "Sorry For Inconvenience\n Error While Placing Order!\nYou can continue with your cart",
+                ERROR_ORDER,
                 style: TextStyle(color: Colors.black),
               ),
             ],
@@ -256,7 +270,7 @@ class _ShopPageState extends State<ShopPage> {
                 padding: EdgeInsets.only(top: 16.0),
               ),
               Text(
-                "Placing Your Order",
+                TEXT_ORDER_PLACING,
                 style: TextStyle(color: Colors.black),
               ),
             ],
@@ -282,7 +296,7 @@ class _ShopPageState extends State<ShopPage> {
                   padding: EdgeInsets.only(top: 16.0),
                 ),
                 Text(
-                  "Order Placed",
+                  TEXT_ORDER_PLACED,
                   style: TextStyle(
                       color: Colors.blue,
                       fontSize: 22.0,

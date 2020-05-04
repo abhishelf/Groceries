@@ -25,23 +25,15 @@ class _SplashPageState extends State<SplashPage>
   bool _isTimerFinished = false;
   bool _isUserAuthenticated;
 
-  String _loadingText = "Loading";
-  double _percentage = 10;
+  String _loadingText = "Please Wait";
 
   _SplashPageState() {
     _groceryPresenter = GroceryPresenter(this);
   }
 
-  //FIXME REMOVE
-  _rm() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove("EMAIL");
-  }
-
   @override
   void initState() {
     super.initState();
-    _rm();
     _checkUserAuth();
 
     Timer(Duration(seconds: 5), () {
@@ -65,9 +57,6 @@ class _SplashPageState extends State<SplashPage>
       } else {
         _isUserAuthenticated = false;
       }
-      setState(() {
-        _percentage = 40;
-      });
       _groceryPresenter.loadGroceryList();
     }).catchError((_) {
       _isUserAuthenticated = false;
@@ -102,7 +91,6 @@ class _SplashPageState extends State<SplashPage>
                         child: Image(
                           //FIXME change logo of app
                           image: AssetImage("images/apple.jpg"),
-                          color: Colors.greenAccent,
                           height: 50.0,
                           width: 50.0,
                         ),
@@ -123,25 +111,14 @@ class _SplashPageState extends State<SplashPage>
               ),
               Expanded(
                 child: Container(
+                  width: double.infinity,
                   color: Colors.white,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 64.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Container(
-                            height: 10,
-                            child: LinearProgressIndicator(
-                              value: _percentage, // percent filled
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.greenAccent),
-                              backgroundColor: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ),
+                          padding: const EdgeInsets.symmetric(horizontal: 64.0),
+                          child: CircularProgressIndicator()),
                       Padding(
                         padding: EdgeInsets.only(top: 20.0),
                       ),
@@ -191,9 +168,6 @@ class _SplashPageState extends State<SplashPage>
     _groceryList = groceryList;
     if (_isTimerFinished) {
       _isLoading = false;
-      setState(() {
-        _percentage = 90;
-      });
       if (_isUserAuthenticated) {
         MyNavigator.goToHomePage(context, _groceryList);
       } else {

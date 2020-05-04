@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery/modal/Grocery.dart';
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String _validateEmail(String email) {
     if (!EmailValidator.validate(email)) {
-      return EMAIL_ERROR;
+      return ERROR_EMAIL;
     }
 
     return null;
@@ -41,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String _validatePassword(String password) {
     if (password.length < 6) {
-      return PASSWORD_ERROR;
+      return ERROR_PASSWORD;
     }
 
     return null;
@@ -69,29 +70,32 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
-        Auth()
-            .signIn(_emailController.text, _passwordController.text)
-            .then((_userId) {
-          if (_userId != null) {
-            _saveEmail();
-          } else {
-            Fluttertoast.showToast(
-              msg: LOGIN_ERROR,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              toastLength: Toast.LENGTH_SHORT,
-              timeInSecForIosWeb: 3,
-            );
-          }
-        }).catchError((_) {
+      });
+
+      Auth()
+          .signIn(_emailController.text, _passwordController.text)
+          .then((_userId) {
+        if (_userId != null) {
+          _saveEmail();
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
           Fluttertoast.showToast(
-            msg: LOGIN_ERROR,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            toastLength: Toast.LENGTH_SHORT,
-            timeInSecForIosWeb: 3,
+            msg: ERROR_LOGIN,
+            toastLength: Toast.LENGTH_LONG,
+            timeInSecForIosWeb: 5,
           );
+        }
+      }).catchError((_) {
+        setState(() {
+          _isLoading = false;
         });
+        Fluttertoast.showToast(
+          msg: ERROR_LOGIN,
+          toastLength: Toast.LENGTH_LONG,
+          timeInSecForIosWeb: 5,
+        );
       });
     }
   }
@@ -121,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Text(
-              LOGIN_TITLE,
+              TITLE_LOGIN,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -132,130 +136,130 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.only(top: 8.0),
             ),
             Text(
-              LOGIN_SUB_TITLE,
+              SUBTITLE_LOGIN,
               style: TextStyle(
                 color: Colors.black54,
                 fontSize: 16.0,
               ),
             ),
             Expanded(
-              flex: 1,
-              child: Form(
-                key: _formKey,
-                child: Theme(
-                  data: ThemeData(
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white70,
-                      labelStyle: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 48.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        TextFormField(
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: EMAIL_HINT,
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          controller: _emailController,
-                          enabled: !_isLoading,
-                          validator: (value) {
-                            return _validateEmail(value);
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12.0),
-                        ),
-                        TextFormField(
-                          autofocus: false,
-                          decoration: InputDecoration(
-                              labelText: PASSWORD_HINT,
-                              suffixIcon: GestureDetector(
-                                child: !_isObscure
-                                    ? Icon(Icons.visibility)
-                                    : Icon(Icons.visibility_off),
-                                onTap: () {
-                                  setState(() {
-                                    _isObscure
-                                        ? _isObscure = false
-                                        : _isObscure = true;
-                                  });
-                                },
-                              )),
-                          keyboardType: TextInputType.visiblePassword,
-                          enabled: !_isLoading,
-                          obscureText: _isObscure,
-                          controller: _passwordController,
-                          validator: (value) {
-                            return _validatePassword(value);
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 12.0),
-                        ),
-                        GestureDetector(
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              FORGOT_PASSWORD,
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 16.0),
-                            ),
-                          ),
-                          onTap: () {
-                            if (_isLoading) return null;
-                            return _showForgotPassword(context);
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 48.0),
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: MaterialButton(
-                            onPressed: () {
-                              if (_isLoading) return null;
-                              return _submitForm(context);
-                            },
-                            color: _isLoading
-                                ? Colors.grey
-                                : Theme.of(context).primaryColor,
-                            textColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12.0)),
-                            ),
-                            child: _isLoading
-                                ? Container(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 8.0),
-                                    child: CircularProgressIndicator(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor,
-                                      strokeWidth: 2.0,
-                                    ),
-                                  )
-                                : Text(LOGIN_BUTTON),
-                            height: 48.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+             flex: 1,
+             child: Form(
+               key: _formKey,
+               child: Theme(
+                 data: ThemeData(
+                   inputDecorationTheme: InputDecorationTheme(
+                     border: OutlineInputBorder(
+                       borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                     ),
+                     filled: true,
+                     fillColor: Colors.white70,
+                     labelStyle: TextStyle(
+                       color: Colors.black54,
+                       fontSize: 16.0,
+                     ),
+                   ),
+                 ),
+                 child: Container(
+                   margin: EdgeInsets.only(bottom: 48.0),
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     mainAxisAlignment: MainAxisAlignment.end,
+                     children: <Widget>[
+                       TextFormField(
+                         autofocus: false,
+                         decoration: InputDecoration(
+                           labelText: HINT_EMAIL,
+                         ),
+                         keyboardType: TextInputType.emailAddress,
+                         controller: _emailController,
+                         enabled: !_isLoading,
+                         validator: (value) {
+                           return _validateEmail(value);
+                         },
+                       ),
+                       Padding(
+                         padding: EdgeInsets.symmetric(vertical: 12.0),
+                       ),
+                       TextFormField(
+                         autofocus: false,
+                         decoration: InputDecoration(
+                             labelText: HINT_PASSWORD,
+                             suffixIcon: GestureDetector(
+                               child: !_isObscure
+                                   ? Icon(Icons.visibility)
+                                   : Icon(Icons.visibility_off),
+                               onTap: () {
+                                 setState(() {
+                                   _isObscure
+                                       ? _isObscure = false
+                                       : _isObscure = true;
+                                 });
+                               },
+                             )),
+                         keyboardType: TextInputType.visiblePassword,
+                         enabled: !_isLoading,
+                         obscureText: _isObscure,
+                         controller: _passwordController,
+                         validator: (value) {
+                           return _validatePassword(value);
+                         },
+                       ),
+                       Padding(
+                         padding: EdgeInsets.only(top: 12.0),
+                       ),
+                       GestureDetector(
+                         child: SizedBox(
+                           width: double.infinity,
+                           child: Text(
+                             BUTTON_FORGOT_PASSWORD,
+                             textAlign: TextAlign.end,
+                             style: TextStyle(
+                                 color: Colors.black54, fontSize: 16.0),
+                           ),
+                         ),
+                         onTap: () {
+                           if (_isLoading) return null;
+                           return _showForgotPassword(context);
+                         },
+                       ),
+                       Padding(
+                         padding: EdgeInsets.only(top: 48.0),
+                       ),
+                       SizedBox(
+                         width: double.infinity,
+                         child: MaterialButton(
+                           onPressed: () {
+                             if (_isLoading) return null;
+                             return _submitForm(context);
+                           },
+                           color: _isLoading
+                               ? Colors.grey
+                               : Theme.of(context).primaryColor,
+                           textColor: Colors.white,
+                           shape: RoundedRectangleBorder(
+                             borderRadius:
+                             BorderRadius.all(Radius.circular(12.0)),
+                           ),
+                           child: _isLoading
+                               ? Container(
+                             padding:
+                             EdgeInsets.symmetric(vertical: 8.0),
+                             child: CircularProgressIndicator(
+                               backgroundColor:
+                               Theme.of(context).primaryColor,
+                               strokeWidth: 2.0,
+                             ),
+                           )
+                               : Text(BUTTON_LOGIN),
+                           height: 48.0,
+                         ),
+                       ),
+                     ],
+                   ),
+                 ),
+               ),
+             ),
             ),
             GestureDetector(
               child: Row(
@@ -263,14 +267,14 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   RichText(
                     text: TextSpan(
-                      text: SIGNUP_LOGIN_BUTTON,
+                      text: BUTTON_SIGNUP_IN_LOGIN,
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 16.0,
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: SIGNUP_BUTTON,
+                          text: BUTTON_SIGNUP,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         ),
@@ -341,7 +345,7 @@ class _LoginPageState extends State<LoginPage> {
                           TextFormField(
                             autofocus: true,
                             decoration: InputDecoration(
-                              hintText: EMAIL_HINT,
+                              hintText: HINT_EMAIL,
                             ),
                             keyboardType: TextInputType.emailAddress,
                             controller: _passwordResetController,

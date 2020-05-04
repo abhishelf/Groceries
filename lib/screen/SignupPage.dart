@@ -29,7 +29,7 @@ class _SignupPageState extends State<SignupPage> {
 
   String _validateEmail(String email) {
     if (!EmailValidator.validate(email)) {
-      return EMAIL_ERROR;
+      return ERROR_EMAIL;
     }
 
     return null;
@@ -37,7 +37,7 @@ class _SignupPageState extends State<SignupPage> {
 
   String _validatePassword(String password) {
     if (password.length < 6) {
-      return PASSWORD_ERROR;
+      return ERROR_PASSWORD;
     }
 
     return null;
@@ -53,41 +53,41 @@ class _SignupPageState extends State<SignupPage> {
           .then((userId) {
         if (userId != null) {
           _saveEmail();
-          setState(() {
-            _isLoading = false;
-          });
-          MyNavigator.goToHomePage(context, widget.grocery);
         } else {
           setState(() {
-            Fluttertoast.showToast(
-              msg: SIGNUP_ERROR,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              toastLength: Toast.LENGTH_SHORT,
-              timeInSecForIosWeb: 3,
-            );
             _isLoading = false;
           });
+          Fluttertoast.showToast(
+            msg: ERROR_SIGNUP,
+            toastLength: Toast.LENGTH_LONG,
+            timeInSecForIosWeb: 5,
+          );
         }
-      }).catchError((_) {
+      }).catchError((error) {
+        setState(() {
+          _isLoading = false;
+        });
         Fluttertoast.showToast(
-          msg: SIGNUP_ERROR,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 3,
+          msg: ERROR_SIGNUP,
+          toastLength: Toast.LENGTH_LONG,
+          timeInSecForIosWeb: 5,
         );
       });
     }
   }
 
   void _loadLoginPage(context) {
-    Navigator.pop(context);
+    MyNavigator.goToLoginPage(context, widget.grocery);
   }
 
   void _saveEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("EMAIL", _emailController.toString());
+
+    setState(() {
+      _isLoading = false;
+    });
+    MyNavigator.goToHomePage(context, widget.grocery);
   }
 
   @override
@@ -104,7 +104,7 @@ class _SignupPageState extends State<SignupPage> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Text(
-              SIGNUP_TITLE,
+              TITLE_SIGNUP,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -115,7 +115,7 @@ class _SignupPageState extends State<SignupPage> {
               padding: EdgeInsets.only(top: 8.0),
             ),
             Text(
-              SIGNUP_SUBTITLE,
+              SUBTITLE_SIGNUP,
               style: TextStyle(
                 color: Colors.black54,
                 fontSize: 16.0,
@@ -148,7 +148,7 @@ class _SignupPageState extends State<SignupPage> {
                         TextFormField(
                           autofocus: false,
                           decoration: InputDecoration(
-                            labelText: EMAIL_HINT,
+                            labelText: HINT_EMAIL,
                           ),
                           keyboardType: TextInputType.emailAddress,
                           controller: _emailController,
@@ -163,7 +163,7 @@ class _SignupPageState extends State<SignupPage> {
                         TextFormField(
                           autofocus: false,
                           decoration: InputDecoration(
-                              labelText: PASSWORD_HINT,
+                              labelText: HINT_PASSWORD,
                               suffixIcon: GestureDetector(
                                 child: !_isObscure
                                     ? Icon(Icons.visibility)
@@ -179,6 +179,7 @@ class _SignupPageState extends State<SignupPage> {
                           keyboardType: TextInputType.visiblePassword,
                           enabled: !_isLoading,
                           obscureText: _isObscure,
+                          controller: _passwordController,
                           validator: (value) {
                             return _validatePassword(value);
                           },
@@ -211,7 +212,7 @@ class _SignupPageState extends State<SignupPage> {
                                       strokeWidth: 2.0,
                                     ),
                                   )
-                                : Text(SIGNUP_BUTTON),
+                                : Text(BUTTON_SIGNUP),
                             height: 48.0,
                           ),
                         ),
@@ -227,14 +228,14 @@ class _SignupPageState extends State<SignupPage> {
                 children: <Widget>[
                   RichText(
                     text: TextSpan(
-                      text: LOGIN_SIGNUP_BUTTON,
+                      text: BUTTON_LOGIN_IN_SIGNUP,
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 16.0,
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: LOGIN_BUTTON,
+                          text: BUTTON_LOGIN,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         ),

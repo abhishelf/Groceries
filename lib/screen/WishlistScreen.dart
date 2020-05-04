@@ -89,7 +89,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
         title: Container(
           padding: EdgeInsets.only(top: 32.0, bottom: 22.0),
           child: Text(
-            CART_TITLE,
+            TITLE_CART,
             style: TextStyle(color: Colors.white, fontSize: 22.0),
           ),
         ),
@@ -101,7 +101,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           : _wishlist.length == null || _wishlist.length == 0
               ? Center(
                   child: Text(
-                    WISHLIST_EMPTY,
+                    TEXT_WISHLIST_EMPTY,
                     style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -258,7 +258,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
       },
       color: Colors.orangeAccent,
       child: Text(
-        ADD_TO_CART,
+        TEXT_ADD_TO_CART,
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       shape: RoundedRectangleBorder(

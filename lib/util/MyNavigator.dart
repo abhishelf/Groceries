@@ -8,7 +8,7 @@ import 'package:grocery/screen/SignupPage.dart';
 
 class MyNavigator {
   static void goToSignUpPage(BuildContext context,List<Grocery> grocery){
-    Navigator.push(context, MaterialPageRoute(
+    Navigator.pushReplacement(context, MaterialPageRoute(
       builder: (context) => SignupPage(grocery: grocery),
     ));
   }
