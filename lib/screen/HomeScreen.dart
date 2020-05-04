@@ -4,6 +4,7 @@ import 'package:grocery/db/DatabaseHelper.dart';
 import 'package:grocery/modal/Cart.dart';
 import 'package:grocery/modal/Grocery.dart';
 import 'package:grocery/modal/Wishlist.dart';
+import 'package:grocery/util/DependencyInjection.dart';
 import 'package:grocery/util/String.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoadingWish;
 
   void _addRemoveWishlist(Grocery grocery) async {
-    try{
-      bool result = await _databaseHelper.getWishlistById(grocery.id.toString());
+    try {
+      bool result = await _databaseHelper.getWishlistById(grocery.id);
       if (result) {
         await _databaseHelper.removeFromWishlist(grocery.id);
       } else {
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
             quantity: grocery.price);
         await _databaseHelper.addToWishlist(wishlist);
       }
-    }catch(error){
+    } catch (error) {
       print(error);
     }
 
@@ -97,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _groceryList = widget.grocery;
     _databaseHelper = DatabaseHelper();
-//    _databaseHelper.deleteWishlist();
     _isLoadingCart = true;
     _isLoadingWish = true;
     _getCartList();
@@ -115,14 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.sort,
-                color: Colors.white,
-              ))
-        ],
       ),
       body: _isLoadingCart || _isLoadingWish
           ? Center(
@@ -155,7 +147,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 48,
-                    backgroundImage: AssetImage(_groceryList[index].image),
+                    backgroundImage: Injector.getFlavor() == Flavor.PROD
+                        ? NetworkImage(_groceryList[index].image)
+                        : AssetImage(_groceryList[index].image),
                   ),
                   Container(
                     padding:

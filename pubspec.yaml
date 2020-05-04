@@ -30,6 +30,8 @@ dependencies:
   intl: ^0.16.1
   cloud_firestore: ^0.13.5
   shared_preferences: ^0.5.7
+  firebase_auth: ^0.16.0
+  fluttertoast: ^4.0.0
 
 dev_dependencies:
   flutter_test:

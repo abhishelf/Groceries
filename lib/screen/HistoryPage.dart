@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/modal/Placed.dart';
+import 'package:grocery/modal/History.dart';
 import 'package:grocery/presenter/HistoryPresenter.dart';
+import 'package:grocery/util/DependencyInjection.dart';
 import 'package:grocery/util/String.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _HistoryPageState extends State<HistoryPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Order History",
+          ORDER_TITLE,
           style: TextStyle(
             color: Colors.white,
           ),
@@ -40,9 +41,9 @@ class _HistoryPageState extends State<HistoryPage>
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : _historyList.length == 0
+          : _historyList == null || _historyList.length == 0
               ? Center(
-                  child: Text("Nothing to show here"),
+                  child: Text(NONE_ERROR),
                 )
               : ListView.builder(
                   itemCount: _historyList.length,
@@ -71,11 +72,13 @@ class _HistoryPageState extends State<HistoryPage>
                 children: <Widget>[
                   CircleAvatar(
                     radius: 48,
-                    backgroundImage: AssetImage(_historyList[index].image),
+                    backgroundImage: Injector.getFlavor() == Flavor.PROD
+                        ? NetworkImage(_historyList[index].image)
+                        : AssetImage(_historyList[index].image),
                   ),
                   Container(
                     padding:
-                    EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                     decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.8),
                       shape: BoxShape.rectangle,
@@ -121,8 +124,18 @@ class _HistoryPageState extends State<HistoryPage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
-                            Text("Q : "+_historyList[index].q,style: TextStyle(color: Colors.orangeAccent,fontWeight: FontWeight.bold),),
-                            Text(_historyList[index].date,style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),)
+                            Text(
+                              "Q : " + _historyList[index].q,
+                              style: TextStyle(
+                                  color: Colors.orangeAccent,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              _historyList[index].date,
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold),
+                            )
                           ],
                         ),
                       ),
@@ -144,6 +157,7 @@ class _HistoryPageState extends State<HistoryPage>
   @override
   void onLoadException(String error) {
     setState(() {
+      _isLoading = false;
       _historyList = List();
     });
   }

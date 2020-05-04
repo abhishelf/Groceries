@@ -1,5 +1,4 @@
-class Cart{
-
+class Cart {
   String id;
   String image;
   String title;
@@ -29,6 +28,4 @@ class Cart{
 
     return map;
   }
-
-
 }

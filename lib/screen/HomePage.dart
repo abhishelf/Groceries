@@ -11,20 +11,18 @@ import 'WishlistScreen.dart';
 class HomePage extends StatefulWidget {
   final List<Grocery> grocery;
 
-  HomePage({Key key,this.grocery}): super(key: key);
+  HomePage({Key key, this.grocery}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey _bottomNavigationKey = GlobalKey();
+  final PageStorageBucket bucket = PageStorageBucket();
 
   List<Widget> pageList;
-
   int _currentPage = 0;
-  GlobalKey _bottomNavigationKey = GlobalKey();
-
-  final PageStorageBucket bucket = PageStorageBucket();
 
   void _onBottomNavItemTap(int index) {
     setState(() {
@@ -32,15 +30,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _saveEmail() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("EMAIL", "7050316935");
-  }
-
   @override
   void initState() {
     super.initState();
-    _saveEmail();
     pageList = [
       HomeScreen(grocery: widget.grocery),
       WishlistScreen(),
@@ -73,16 +65,17 @@ class _HomePageState extends State<HomePage> {
             size: 22.0,
           ),
           Icon(
-            Icons.person,
+            Icons.history,
             color: Colors.white,
             size: 22.0,
           ),
         ],
         color: Theme.of(context).primaryColor,
         buttonBackgroundColor: Theme.of(context).primaryColor,
+        // FIXME Chagne background color to try different combination
         backgroundColor: _currentPage == 2 ? Colors.black12 : Colors.white,
         animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 400),
+        animationDuration: Duration(milliseconds: 600),
         onTap: _onBottomNavItemTap,
       ),
       body: PageStorage(

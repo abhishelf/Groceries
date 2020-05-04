@@ -60,7 +60,8 @@ class DatabaseHelper {
 
   Future<int> deleteCartItem(String id) async {
     Database db = await this.database;
-    var result = await db.rawDelete('DELETE FROM $TABLE_CART where $COL_ID = $id');
+    var result =
+        await db.rawDelete('DELETE FROM $TABLE_CART where $COL_ID = $id');
     return result;
   }
 
@@ -78,7 +79,8 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getCartMapList() async {
     Database db = await this.database;
-    var result = await db.rawQuery('Select * from $TABLE_CART order by $COL_CART_Q ASC');
+    var result =
+        await db.rawQuery('Select * from $TABLE_CART order by $COL_CART_Q ASC');
     return result;
   }
 
@@ -94,7 +96,8 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getCartMapById(String id) async {
     Database db = await this.database;
-    var result = await db.rawQuery('Select * from $TABLE_CART Where $COL_ID = $id');
+    var result =
+        await db.rawQuery('Select * from $TABLE_CART Where $COL_ID = $id');
     return result;
   }
 
@@ -106,10 +109,9 @@ class DatabaseHelper {
       cartList.add(Cart.fromMap(cart[i]));
     }
 
-    if(cart.length == 0) return null;
+    if (cart.length == 0) return null;
     return cartList[0];
   }
-
 
   // Wishlist Table Operation
   Future<int> addToWishlist(Wishlist wishlist) async {
@@ -120,20 +122,22 @@ class DatabaseHelper {
 
   Future<int> removeFromWishlist(String id) async {
     Database db = await this.database;
-    var result = await db.rawDelete('DELETE FROM $TABLE_WISHLIST where $COL_ID = $id');
+    var result =
+        await db.rawDelete('DELETE FROM $TABLE_WISHLIST where $COL_ID = $id');
     return result;
   }
 
-  Future<bool> getWishlistById(String id) async{
+  Future<bool> getWishlistById(String id) async {
     Database db = await this.database;
-    var result = await db.rawQuery('Select * from $TABLE_WISHLIST Where $COL_ID = $id');
-    try{
-      if(result.length > 0) return true;
-    }catch(error){}
+    var result =
+        await db.rawQuery('Select * from $TABLE_WISHLIST Where $COL_ID = $id');
+    try {
+      if (result.length > 0) return true;
+    } catch (error) {}
     return false;
   }
 
-  Future<List<Wishlist>> getWishlist() async{
+  Future<List<Wishlist>> getWishlist() async {
     Database db = await this.database;
     var result = await db.rawQuery('Select * from $TABLE_WISHLIST');
 

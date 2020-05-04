@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/modal/Cart.dart';
 import 'package:grocery/modal/Grocery.dart';
@@ -8,15 +7,15 @@ import 'package:grocery/screen/ShopPage.dart';
 import 'package:grocery/screen/SignupPage.dart';
 
 class MyNavigator {
-  static void goToSignUpPage(BuildContext context){
+  static void goToSignUpPage(BuildContext context,List<Grocery> grocery){
     Navigator.push(context, MaterialPageRoute(
-      builder: (context) => SignupPage(),
+      builder: (context) => SignupPage(grocery: grocery),
     ));
   }
 
   static void goToLoginPage(BuildContext context,List<Grocery> grocery){
     Navigator.pushReplacement(context, MaterialPageRoute(
-      builder: (context) => LoginPage(),
+      builder: (context) => LoginPage(grocery: grocery),
     ));
   }
 

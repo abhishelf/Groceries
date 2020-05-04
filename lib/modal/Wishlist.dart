@@ -1,5 +1,4 @@
-class Wishlist{
-
+class Wishlist {
   String id;
   String image;
   String title;

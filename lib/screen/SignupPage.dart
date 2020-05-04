@@ -2,16 +2,23 @@ import 'dart:async';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:grocery/modal/Grocery.dart';
+import 'package:grocery/util/BaseAuth.dart';
+import 'package:grocery/util/MyNavigator.dart';
 import 'package:grocery/util/String.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupPage extends StatefulWidget {
+  final List<Grocery> grocery;
+
+  SignupPage({Key key, this.grocery}) : super(key: key);
+
   @override
   _SignupPageState createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
-
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -38,24 +45,47 @@ class _SignupPageState extends State<SignupPage> {
 
   void _submitForm() {
     if (_formKey.currentState.validate()) {
-      _saveEmail();
       setState(() {
         _isLoading = true;
       });
-      Timer(Duration(seconds: 5), () {
-        setState(() {
-          _showSnackBar(true, "Login Failed");
-          _isLoading = false;
-        });
+      Auth()
+          .signUp(_emailController.text, _passwordController.text)
+          .then((userId) {
+        if (userId != null) {
+          _saveEmail();
+          setState(() {
+            _isLoading = false;
+          });
+          MyNavigator.goToHomePage(context, widget.grocery);
+        } else {
+          setState(() {
+            Fluttertoast.showToast(
+              msg: SIGNUP_ERROR,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              toastLength: Toast.LENGTH_SHORT,
+              timeInSecForIosWeb: 3,
+            );
+            _isLoading = false;
+          });
+        }
+      }).catchError((_) {
+        Fluttertoast.showToast(
+          msg: SIGNUP_ERROR,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 3,
+        );
       });
     }
   }
-  
-  void _loadLoginPage(context){
+
+  void _loadLoginPage(context) {
     Navigator.pop(context);
   }
 
-  void _saveEmail() async{
+  void _saveEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("EMAIL", _emailController.toString());
   }
@@ -169,18 +199,18 @@ class _SignupPageState extends State<SignupPage> {
                             textColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(12.0)),
+                                  BorderRadius.all(Radius.circular(12.0)),
                             ),
                             child: _isLoading
                                 ? Container(
-                              padding:
-                              EdgeInsets.symmetric(vertical: 8.0),
-                              child: CircularProgressIndicator(
-                                backgroundColor:
-                                Theme.of(context).primaryColor,
-                                strokeWidth: 2.0,
-                              ),
-                            )
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.0),
+                                    child: CircularProgressIndicator(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      strokeWidth: 2.0,
+                                    ),
+                                  )
                                 : Text(SIGNUP_BUTTON),
                             height: 48.0,
                           ),
@@ -227,17 +257,6 @@ class _SignupPageState extends State<SignupPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  void _showSnackBar(bool isError, String message){
-    _scaffoldKey.currentState.removeCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-        backgroundColor: isError? Colors.redAccent: Colors.blueGrey,
-        duration: Duration(seconds: 3),
-        content: Text(message),
       ),
     );
   }

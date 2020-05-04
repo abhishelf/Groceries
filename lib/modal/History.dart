@@ -1,5 +1,4 @@
 class History {
-
   String id;
   String title;
   String image;
@@ -8,7 +7,13 @@ class History {
   String price;
   String date;
 
-  History({this.id, this.title, this.image, this.quantity, this.q, this.price,
+  History(
+      {this.id,
+      this.title,
+      this.image,
+      this.quantity,
+      this.q,
+      this.price,
       this.date});
 }
 

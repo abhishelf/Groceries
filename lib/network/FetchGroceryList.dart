@@ -8,13 +8,12 @@ class FetchGroceryList extends GroceryRepository {
   Future<List<Grocery>> fetchGroceryList() async {
     List<Grocery> grocery = List();
 
-    await databaseReference
-        .collection("grocery")
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
+    await databaseReference.collection("grocery").getDocuments().then(
+        (QuerySnapshot snapshot) {
       try {
         snapshot.documents.forEach((f) {
           Grocery g = Grocery(
+              //FIXME change documenId to data['id']
               id: f.documentID,
               image: f.data['image'],
               title: f.data['title'],
@@ -25,7 +24,8 @@ class FetchGroceryList extends GroceryRepository {
       } catch (error) {
         throw FetchDataException("Error While Fetching Grocery : [$error]");
       }
-    }).catchError((error) => throw FetchDataException("Error While Fetching Grocery : [$error]"));
+    }).catchError((error) =>
+        throw FetchDataException("Error While Fetching Grocery : [$error]"));
 
     return grocery;
   }

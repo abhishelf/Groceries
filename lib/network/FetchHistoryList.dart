@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:grocery/modal/Placed.dart';
+import 'package:grocery/modal/History.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FetchHistoryList extends HistoryRepository {
@@ -13,8 +13,8 @@ class FetchHistoryList extends HistoryRepository {
     await Firestore.instance.collection("orders").getDocuments().then((QuerySnapshot snapshot){
       try {
         snapshot.documents.forEach((f) {
+          //FIXME replace A with #
          if(f.documentID.split("A")[0].trim() == email.trim()){
-           print(f.data);
            for(int i=0;i<f.data['cart'].length;i++){
              List<String> splt = f.data['cart'][i].split("@");
              History history = History(

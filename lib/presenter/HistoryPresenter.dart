@@ -1,4 +1,4 @@
-import 'package:grocery/modal/Placed.dart';
+import 'package:grocery/modal/History.dart';
 import 'package:grocery/util/DependencyInjection.dart';
 
 abstract class HistoryListViewContract {

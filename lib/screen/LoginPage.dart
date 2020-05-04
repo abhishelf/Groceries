@@ -4,15 +4,18 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/util/MyNaigator.dart';
+import 'package:grocery/util/BaseAuth.dart';
+import 'package:grocery/util/MyNavigator.dart';
 import 'package:grocery/util/String.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   final List<Grocery> grocery;
 
-  LoginPage({Key key,this.grocery}): super(key: key);
+  LoginPage({Key key, this.grocery}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -20,6 +23,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
+  TextEditingController _passwordResetController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKeyLocal = GlobalKey<FormState>();
@@ -43,16 +47,20 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  // TODO _forgotPassword _submitForm
   void _forgotPassword(BuildContext context) {
     Navigator.pop(context);
     setState(() {
       _isLoading = true;
     });
-    Timer(Duration(seconds: 5), () {
+    Auth().sendPasswordResetLink(_passwordResetController.text).then((_) {
       setState(() {
         _isLoading = false;
         _showSnackBar(false, "Check Mail For Further Process");
+      });
+    }).catchError((_) {
+      setState(() {
+        _isLoading = false;
+        _showSnackBar(true, "Error While Sending Reset Link");
       });
     });
   }
@@ -61,25 +69,42 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
-        _saveEmail();
-      });
-      Timer(Duration(seconds: 5), () {
-        setState(() {
-          _showSnackBar(true, "Login Failed");
-          MyNavigator.goToHomePage(context,widget.grocery);
-          _isLoading = false;
+        Auth()
+            .signIn(_emailController.text, _passwordController.text)
+            .then((_userId) {
+          if (_userId != null) {
+            _saveEmail();
+          } else {
+            Fluttertoast.showToast(
+              msg: LOGIN_ERROR,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              toastLength: Toast.LENGTH_SHORT,
+              timeInSecForIosWeb: 3,
+            );
+          }
+        }).catchError((_) {
+          Fluttertoast.showToast(
+            msg: LOGIN_ERROR,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            toastLength: Toast.LENGTH_SHORT,
+            timeInSecForIosWeb: 3,
+          );
         });
       });
     }
   }
 
   void _loadSignUpPage(context) {
-    MyNavigator.goToSignUpPage(context);
+    MyNavigator.goToSignUpPage(context, widget.grocery);
   }
 
-  void _saveEmail() async{
+  void _saveEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("EMAIL", _emailController.toString());
+
+    MyNavigator.goToHomePage(context, widget.grocery);
   }
 
   @override
@@ -171,6 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                           keyboardType: TextInputType.visiblePassword,
                           enabled: !_isLoading,
                           obscureText: _isObscure,
+                          controller: _passwordController,
                           validator: (value) {
                             return _validatePassword(value);
                           },
@@ -276,8 +302,7 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(32.0),
-              topRight: Radius.circular(32.0)),
+              topLeft: Radius.circular(32.0), topRight: Radius.circular(32.0)),
         ),
         backgroundColor: Colors.white,
         isScrollControlled: true,
@@ -289,7 +314,8 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Form(
                     key: _formKeyLocal,
                     child: Theme(
@@ -318,6 +344,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: EMAIL_HINT,
                             ),
                             keyboardType: TextInputType.emailAddress,
+                            controller: _passwordResetController,
                             validator: (value) {
                               return _validateEmail(value);
                             },
@@ -331,7 +358,7 @@ class _LoginPageState extends State<LoginPage> {
                                 _forgotPassword(context);
                               }
                             },
-                            child:Icon(
+                            child: Icon(
                               Icons.arrow_forward,
                               color: Colors.white,
                             ),
@@ -348,11 +375,11 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  void _showSnackBar(bool isError, String message){
+  void _showSnackBar(bool isError, String message) {
     _scaffoldKey.currentState.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
-        backgroundColor: isError? Colors.redAccent: Colors.blueGrey,
+        backgroundColor: isError ? Colors.redAccent : Colors.blueGrey,
         duration: Duration(seconds: 3),
         content: Text(message),
       ),

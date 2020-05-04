@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/screen/HomePage.dart';
-import 'package:grocery/screen/LoginPage.dart';
-import 'package:grocery/screen/SignupPage.dart';
 import 'package:grocery/screen/SplashPage.dart';
-import 'package:grocery/util/DependencyInjection.dart';
 import 'package:grocery/util/DependencyInjection.dart';
 import 'package:grocery/util/String.dart';
 

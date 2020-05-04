@@ -1,5 +1,4 @@
-class Grocery{
-
+class Grocery {
   String id;
   String image;
   String title;

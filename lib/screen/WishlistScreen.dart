@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery/db/DatabaseHelper.dart';
 import 'package:grocery/modal/Cart.dart';
 import 'package:grocery/modal/Wishlist.dart';
+import 'package:grocery/util/DependencyInjection.dart';
 import 'package:grocery/util/String.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -136,7 +137,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 48,
-                    backgroundImage: AssetImage(_wishlist[index].image),
+                    backgroundImage: Injector.getFlavor() == Flavor.PROD
+                        ? NetworkImage(_wishlist[index].image)
+                        : AssetImage(_wishlist[index].image),
                   ),
                   Container(
                     padding:
@@ -213,7 +216,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
       ],
     );
   }
-  
+
   Widget _getCartLayout(int index) {
     for (int i = 0; i < _cartList.length; i++) {
       if (_cartList[i].id == _wishlist[index].id) {

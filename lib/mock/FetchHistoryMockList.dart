@@ -1,4 +1,4 @@
-import 'package:grocery/modal/Placed.dart';
+import 'package:grocery/modal/History.dart';
 
 class FetchHistoryMockList implements HistoryRepository{
 
