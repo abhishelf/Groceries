@@ -89,7 +89,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
         title: Container(
           padding: EdgeInsets.only(top: 32.0, bottom: 22.0),
           child: Text(
-            TITLE_CART,
+            TITLE_WISHLIST,
             style: TextStyle(color: Colors.white, fontSize: 22.0),
           ),
         ),

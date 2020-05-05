@@ -12,9 +12,10 @@ class FetchHistoryList extends HistoryRepository {
 
     await Firestore.instance.collection("orders").getDocuments().then((QuerySnapshot snapshot){
       try {
+        print(email.trim());
         snapshot.documents.forEach((f) {
-          //FIXME replace A with #
-         if(f.documentID.split("A")[0].trim() == email.trim()){
+          print(f.documentID.split("#")[0].trim());
+         if(f.documentID.split("#")[0].trim() == email.trim()){
            for(int i=0;i<f.data['cart'].length;i++){
              List<String> splt = f.data['cart'][i].split("@");
              History history = History(

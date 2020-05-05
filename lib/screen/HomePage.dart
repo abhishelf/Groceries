@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       HomeScreen(grocery: widget.grocery),
       WishlistScreen(),
       CartScreen(),
-      HistoryPage(),
+      HistoryPage(grocery: widget.grocery,),
     ];
   }
 

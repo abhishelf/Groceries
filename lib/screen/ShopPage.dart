@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:grocery/db/DatabaseHelper.dart';
 import 'package:grocery/modal/Cart.dart';
 import 'package:grocery/util/String.dart';
 import 'package:intl/intl.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ShopPage extends StatefulWidget {
@@ -20,20 +22,26 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  Razorpay _razorpay;
+
   static final _formKey = GlobalKey<FormState>();
   static TextEditingController _name = TextEditingController();
   static TextEditingController _phone = TextEditingController();
   static TextEditingController _address = TextEditingController();
 
-  int _currentIndex = 0;
-
   static bool _isLoading = false;
   bool _isComplete = false;
   bool _isError = false;
+  bool _isOnlinePay = false;
 
+  int _currentIndex = 0;
+  int _priceToPay = 0;
+
+  List<String> _cart = List();
   List<Step> step;
 
-  int _priceToPay = 0;
+  String _errorMsg = "Order Not Placed";
+  String _paymentId = "";
 
   next() {
     if (_currentIndex == 0) {
@@ -41,6 +49,7 @@ class _ShopPageState extends State<ShopPage> {
         goTo(_currentIndex + 1);
       }
     } else if (_currentIndex == 1) {
+      _isOnlinePay = true;
       goTo(_currentIndex + 1);
     } else if (_currentIndex == 2) {
       setState(() {
@@ -51,7 +60,10 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   cancel() {
-    if (_currentIndex > 0) {
+    if(_currentIndex == 1){
+      _isOnlinePay = false;
+      goTo(_currentIndex+1);
+    } else if (_currentIndex > 0) {
       goTo(_currentIndex - 1);
     } else {
       Navigator.pop(context);
@@ -75,7 +87,6 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   placeOrder() async {
-    List<String> cart = List();
     for (int i = 0; i < widget.cart.length; i++) {
       String str = widget.cart[i].title +
           "@" +
@@ -86,9 +97,17 @@ class _ShopPageState extends State<ShopPage> {
           widget.cart[i].quantity +
           "@" +
           widget.cart[i].image;
-      cart.add(str);
+      _cart.add(str);
     }
-
+    
+    if(_isOnlinePay){
+      _onlinePayment();
+    }else{
+      _setValue();
+    }
+  }
+  
+  _setValue() async{
     SharedPreferences pref = await SharedPreferences.getInstance();
     String email = pref.getString("EMAIL");
     String datePostfix = DateTime.now().millisecondsSinceEpoch.toString();
@@ -103,8 +122,9 @@ class _ShopPageState extends State<ShopPage> {
       'name': _name.text,
       'phone': _phone.text,
       'address': _address.text,
-      'cart': cart,
+      'cart': _cart,
       'date': formattedDate,
+      'payment': _paymentId,
       'status': '0',
     }).then((_){
       setState(() {
@@ -115,6 +135,8 @@ class _ShopPageState extends State<ShopPage> {
     }).catchError((_){
       setState(() {
         _isError = true;
+        _isLoading = false;
+        _isComplete = true;
       });
     });
   }
@@ -124,9 +146,47 @@ class _ShopPageState extends State<ShopPage> {
     var result = await databaseHelper.deleteCart();
   }
 
+  void _onlinePayment(){
+    var options = {
+      'key': TEST_KEY_ID,
+      'amount': _priceToPay*100,
+      'name': APP_TITLE,
+      'description': TEXT_PAYMENT_DESCRIPTION,
+      'prefill': {
+        'name': _name.text,
+        'contact': "+91"+_phone.text,
+      }
+    };
+
+   try{
+     _razorpay.open(options);
+   }catch(_){
+     setState(() {
+       _isError = true;
+       _isLoading = false;
+       _isComplete = true;
+     });
+   }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    _paymentId = response.paymentId;
+    _setValue();
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    _errorMsg = response.message;
+    setState(() {
+      _isError = true;
+      _isLoading = false;
+      _isComplete = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _razorpay = Razorpay();
     step = [
       Step(
         title: Text(STEP1_TITLE),
@@ -212,18 +272,7 @@ class _ShopPageState extends State<ShopPage> {
         title: Text(STEP2_TITLE),
         isActive: true,
         state: StepState.indexed,
-        content: RadioListTile(
-          title: Text(
-            TEXT_COD,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-            ),
-          ),
-          activeColor: Colors.blue,
-          selected: true,
-        ),
+        content: Container(),
       ),
       Step(
         title: Text(STEP3_TITLE),
@@ -232,6 +281,9 @@ class _ShopPageState extends State<ShopPage> {
         content: Container(),
       ),
     ];
+
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
   }
 
   @override
@@ -252,7 +304,7 @@ class _ShopPageState extends State<ShopPage> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Text(
-                ERROR_ORDER,
+                _errorMsg.isEmpty ? ERROR_ORDER : _errorMsg,
                 style: TextStyle(color: Colors.black),
               ),
             ],
@@ -295,12 +347,26 @@ class _ShopPageState extends State<ShopPage> {
                 Padding(
                   padding: EdgeInsets.only(top: 16.0),
                 ),
-                Text(
-                  TEXT_ORDER_PLACED,
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    TEXT_ORDER_PLACED,
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    (_paymentId.isEmpty ? ".":"Keep It For Reference : "+_paymentId),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.0,),
+                    textAlign: TextAlign.center,
+                  ),
                 )
               ],
             )
@@ -315,8 +381,31 @@ class _ShopPageState extends State<ShopPage> {
           },
           onStepCancel: cancel,
           physics: ClampingScrollPhysics(),
+          controlsBuilder: (BuildContext context, {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+            return Row(
+              children: <Widget>[
+                MaterialButton(
+                  onPressed: onStepContinue,
+                  color: Colors.blue,
+                  child: _currentIndex != 1 ? Text("Continue",style: TextStyle(color: Colors.white),) : Text("Online",style: TextStyle(color: Colors.white),),
+                ),
+                Padding(padding: EdgeInsets.only(right: 16.0),),
+                MaterialButton(
+                  onPressed: onStepCancel,
+                  color:_currentIndex != 1?Colors.white: Colors.blue,
+                  child: _currentIndex != 1 ? Text("Cancel") : Text("Cash On Delivery",style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
   }
 }

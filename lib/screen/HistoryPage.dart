@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/modal/Grocery.dart';
 import 'package:grocery/modal/History.dart';
 import 'package:grocery/presenter/HistoryPresenter.dart';
 import 'package:grocery/util/BaseAuth.dart';
@@ -7,6 +8,9 @@ import 'package:grocery/util/MyNavigator.dart';
 import 'package:grocery/util/String.dart';
 
 class HistoryPage extends StatefulWidget {
+  final List<Grocery> grocery;
+
+  HistoryPage({Key key, this.grocery}) : super(key: key);
   @override
   _HistoryPageState createState() => _HistoryPageState();
 }
@@ -46,7 +50,7 @@ class _HistoryPageState extends State<HistoryPage>
             ),
             onPressed: () {
               Auth().signOut();
-              Navigator.pop(context);
+              MyNavigator.goToLoginPage(context, widget.grocery);
             },
           )
         ],

@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _saveEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("EMAIL", _emailController.toString());
+    prefs.setString("EMAIL", _emailController.text);
 
     MyNavigator.goToHomePage(context, widget.grocery);
   }

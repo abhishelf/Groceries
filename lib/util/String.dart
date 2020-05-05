@@ -1,4 +1,7 @@
-const String APP_TITLE = "Grocery App";
+const String APP_TITLE = "Aahar Purti";
+const String TEST_KEY_ID = "rzp_test_P690XS0F7piecv";
+const String TEST_KEY_SECRET = "jchluLbZan5SDxXykAMfjYte";
+
 
 const String RS = "₹ ";
 const String TOTAL = "Total : ";
@@ -8,6 +11,7 @@ enum SORT { priceHigh, priceLow, name}
 const String TITLE_LOGIN = "Welcome\nback";
 const String TITLE_SIGNUP = "Create\nAccount";
 const String TITLE_CART = "Cart";
+const String TITLE_WISHLIST = "Wishlist";
 const String TITLE_ORDER_HISTORY = "Order History";
 const String TITLE_ORDER_PLACE = "Place Order";
 
@@ -37,6 +41,7 @@ const String TEXT_WISHLIST_EMPTY = "You Do Not Added Any Item Yet";
 const String TEXT_ORDER_PLACING = "Placing Your Order";
 const String TEXT_ORDER_PLACED = "Order Placed";
 const String TEXT_COD = "Cash On Delivery";
+const String TEXT_PAYMENT_DESCRIPTION = "Pay To Place Your Order";
 
 const String ERROR_NONE = "Nothing to show here";
 const String ERROR_EMAIL = "Enter valid email";

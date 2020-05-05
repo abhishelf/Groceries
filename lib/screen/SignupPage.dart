@@ -82,7 +82,7 @@ class _SignupPageState extends State<SignupPage> {
 
   void _saveEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("EMAIL", _emailController.toString());
+    prefs.setString("EMAIL", _emailController.text);
 
     setState(() {
       _isLoading = false;
