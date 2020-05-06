@@ -1,9 +1,9 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/screen/CartScreen.dart';
-import 'package:grocery/screen/HistoryPage.dart';
-import 'package:grocery/screen/HomeScreen.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
+import 'package:aaharpurti/screen/CartScreen.dart';
+import 'package:aaharpurti/screen/HistoryPage.dart';
+import 'package:aaharpurti/screen/HomeScreen.dart';
 
 import 'WishlistScreen.dart';
 

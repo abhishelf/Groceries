@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/db/DatabaseHelper.dart';
-import 'package:grocery/modal/Cart.dart';
-import 'package:grocery/util/DependencyInjection.dart';
-import 'package:grocery/util/MyNavigator.dart';
-import 'package:grocery/util/String.dart';
+import 'package:aaharpurti/db/DatabaseHelper.dart';
+import 'package:aaharpurti/modal/Cart.dart';
+import 'package:aaharpurti/util/DependencyInjection.dart';
+import 'package:aaharpurti/util/MyNavigator.dart';
+import 'package:aaharpurti/util/String.dart';
 
 class CartScreen extends StatefulWidget {
   @override

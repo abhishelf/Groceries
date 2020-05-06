@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:grocery/modal/Grocery.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
 
 class FetchGroceryList extends GroceryRepository {
   final databaseReference = Firestore.instance;

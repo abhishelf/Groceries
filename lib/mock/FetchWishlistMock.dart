@@ -1,4 +1,4 @@
-import 'package:grocery/modal/Wishlist.dart';
+import 'package:aaharpurti/modal/Wishlist.dart';
 
 var wishlist = <Wishlist>[
   Wishlist(

@@ -1,9 +1,9 @@
-import 'package:grocery/mock/FetchGroceryMock.dart';
-import 'package:grocery/mock/FetchHistoryMockList.dart';
-import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/modal/History.dart';
-import 'package:grocery/network/FetchGroceryList.dart';
-import 'package:grocery/network/FetchHistoryList.dart';
+import 'package:aaharpurti/mock/FetchGroceryMock.dart';
+import 'package:aaharpurti/mock/FetchHistoryMockList.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
+import 'package:aaharpurti/modal/History.dart';
+import 'package:aaharpurti/network/FetchGroceryList.dart';
+import 'package:aaharpurti/network/FetchHistoryList.dart';
 
 enum Flavor { MOCK, PROD }
 

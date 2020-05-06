@@ -8,9 +8,38 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:645830655967:android:0767e7edbda2a62d210e6a",
+        "mobilesdk_app_id": "1:645830655967:android:2e27e01d96b8f450210e6a",
         "android_client_info": {
-          "package_name": "com.abhishek.grocery.grocery"
+          "package_name": "com.abhishek.aaharpurti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645830655967-cek523jbdqhj7nka23oq8fvnhgcdgr8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPAl2UN0Ok2E41z2umchFgiDQEaLPpfkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645830655967-cek523jbdqhj7nka23oq8fvnhgcdgr8i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645830655967:android:a9e232dd99321118210e6a",
+        "android_client_info": {
+          "package_name": "com.abhishek.admin"
         }
       },
       "oauth_client": [

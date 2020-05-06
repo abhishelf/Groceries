@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/presenter/GroceryPresenter.dart';
-import 'package:grocery/util/BaseAuth.dart';
-import 'package:grocery/util/MyNavigator.dart';
-import 'package:grocery/util/String.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
+import 'package:aaharpurti/presenter/GroceryPresenter.dart';
+import 'package:aaharpurti/util/BaseAuth.dart';
+import 'package:aaharpurti/util/MyNavigator.dart';
+import 'package:aaharpurti/util/String.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -86,14 +84,14 @@ class _SplashPageState extends State<SplashPage>
                     children: <Widget>[
                       Image(
                         image: AssetImage("images/logo.png"),
-                        height: 70.0,
-                        width: 70.0,
+                        height: 150.0,
+                        width: 150.0,
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 10.0),
                       ),
                       Text(
-                        APP_TITLE,
+                        "",
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

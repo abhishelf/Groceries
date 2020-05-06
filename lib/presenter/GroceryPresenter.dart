@@ -1,5 +1,5 @@
-import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/util/DependencyInjection.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
+import 'package:aaharpurti/util/DependencyInjection.dart';
 
 abstract class GroceryListViewContract {
   void onLoadGrocery(List<Grocery> groceryList);

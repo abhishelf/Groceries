@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:grocery/db/DatabaseHelper.dart';
-import 'package:grocery/modal/Cart.dart';
-import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/modal/Wishlist.dart';
-import 'package:grocery/util/DependencyInjection.dart';
-import 'package:grocery/util/String.dart';
+import 'package:aaharpurti/db/DatabaseHelper.dart';
+import 'package:aaharpurti/modal/Cart.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
+import 'package:aaharpurti/modal/Wishlist.dart';
+import 'package:aaharpurti/util/DependencyInjection.dart';
+import 'package:aaharpurti/util/String.dart';
 
 class HomeScreen extends StatefulWidget {
   final List<Grocery> grocery;

@@ -1,4 +1,4 @@
-package com.abhishek.grocery.grocery;
+package com.abhishek.aaharpurti;
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity;

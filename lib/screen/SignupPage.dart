@@ -1,10 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/util/BaseAuth.dart';
-import 'package:grocery/util/MyNavigator.dart';
-import 'package:grocery/util/String.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
+import 'package:aaharpurti/util/BaseAuth.dart';
+import 'package:aaharpurti/util/MyNavigator.dart';
+import 'package:aaharpurti/util/String.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupPage extends StatefulWidget {

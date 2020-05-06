@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:grocery/modal/History.dart';
+import 'package:aaharpurti/modal/History.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FetchHistoryList extends HistoryRepository {
@@ -15,6 +15,7 @@ class FetchHistoryList extends HistoryRepository {
         snapshot.documents.forEach((f) {
          if(f.documentID.split("#")[0].trim() == email.trim()){
            for(int i=0;i<f.data['cart'].length;i++){
+             print(f.data);
              List<String> splt = f.data['cart'][i].split("@");
              History history = History(
                title: splt[0],
@@ -24,7 +25,7 @@ class FetchHistoryList extends HistoryRepository {
                image: splt[4],
                date: f.data['date'],
                id: f.documentID,
-               status: f.data['status'],
+               status: f.data['status'].toString(),
              );
              list.add(history);
            }

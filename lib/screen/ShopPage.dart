@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery/db/DatabaseHelper.dart';
-import 'package:grocery/modal/Cart.dart';
-import 'package:grocery/util/String.dart';
+import 'package:aaharpurti/db/DatabaseHelper.dart';
+import 'package:aaharpurti/modal/Cart.dart';
+import 'package:aaharpurti/util/String.dart';
 import 'package:intl/intl.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/screen/SplashPage.dart';
-import 'package:grocery/util/DependencyInjection.dart';
-import 'package:grocery/util/String.dart';
+import 'package:aaharpurti/screen/SplashPage.dart';
+import 'package:aaharpurti/util/DependencyInjection.dart';
+import 'package:aaharpurti/util/String.dart';
 
 void main(){
   Injector.configure(Flavor.PROD);

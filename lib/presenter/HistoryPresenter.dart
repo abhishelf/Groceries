@@ -1,5 +1,5 @@
-import 'package:grocery/modal/History.dart';
-import 'package:grocery/util/DependencyInjection.dart';
+import 'package:aaharpurti/modal/History.dart';
+import 'package:aaharpurti/util/DependencyInjection.dart';
 
 abstract class HistoryListViewContract {
   void onLoadHistory(List<History> historyList);

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/modal/Cart.dart';
-import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/screen/HomePage.dart';
-import 'package:grocery/screen/LoginPage.dart';
-import 'package:grocery/screen/ShopPage.dart';
-import 'package:grocery/screen/SignupPage.dart';
+import 'package:aaharpurti/modal/Cart.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
+import 'package:aaharpurti/screen/HomePage.dart';
+import 'package:aaharpurti/screen/LoginPage.dart';
+import 'package:aaharpurti/screen/ShopPage.dart';
+import 'package:aaharpurti/screen/SignupPage.dart';
 
 class MyNavigator {
   static void goToSignUpPage(BuildContext context,List<Grocery> grocery){

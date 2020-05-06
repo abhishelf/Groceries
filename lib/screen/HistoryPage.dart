@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/modal/Grocery.dart';
-import 'package:grocery/modal/History.dart';
-import 'package:grocery/presenter/HistoryPresenter.dart';
-import 'package:grocery/util/BaseAuth.dart';
-import 'package:grocery/util/DependencyInjection.dart';
-import 'package:grocery/util/MyNavigator.dart';
-import 'package:grocery/util/String.dart';
+import 'package:aaharpurti/modal/Grocery.dart';
+import 'package:aaharpurti/modal/History.dart';
+import 'package:aaharpurti/presenter/HistoryPresenter.dart';
+import 'package:aaharpurti/util/BaseAuth.dart';
+import 'package:aaharpurti/util/DependencyInjection.dart';
+import 'package:aaharpurti/util/MyNavigator.dart';
+import 'package:aaharpurti/util/String.dart';
 
 class HistoryPage extends StatefulWidget {
   final List<Grocery> grocery;
@@ -178,6 +178,7 @@ class _HistoryPageState extends State<HistoryPage>
     setState(() {
       _isLoading = false;
       _historyList = List();
+      print(error);
     });
   }
 
@@ -185,6 +186,7 @@ class _HistoryPageState extends State<HistoryPage>
   void onLoadHistory(List<History> historyList) {
     setState(() {
       _isLoading = false;
+      print(historyList.length);
       _historyList = historyList;
     });
   }
