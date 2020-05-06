@@ -4,7 +4,6 @@ import 'package:grocery/modal/Grocery.dart';
 import 'package:grocery/screen/CartScreen.dart';
 import 'package:grocery/screen/HistoryPage.dart';
 import 'package:grocery/screen/HomeScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'WishlistScreen.dart';
 
@@ -72,7 +71,6 @@ class _HomePageState extends State<HomePage> {
         ],
         color: Theme.of(context).primaryColor,
         buttonBackgroundColor: Theme.of(context).primaryColor,
-        // FIXME Chagne background color to try different combination
         backgroundColor: _currentPage == 2 ? Colors.black12 : Colors.white,
         animationCurve: Curves.easeInOut,
         animationDuration: Duration(milliseconds: 600),

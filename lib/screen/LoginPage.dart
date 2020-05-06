@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,12 +54,12 @@ class _LoginPageState extends State<LoginPage> {
     Auth().sendPasswordResetLink(_passwordResetController.text).then((_) {
       setState(() {
         _isLoading = false;
-        _showSnackBar(false, "Check Mail For Further Process");
+        _showSnackBar(false, INFO_CHECK_MAIL);
       });
     }).catchError((_) {
       setState(() {
         _isLoading = false;
-        _showSnackBar(true, "Error While Sending Reset Link");
+        _showSnackBar(true, ERROR_SENDING_LINK);
       });
     });
   }

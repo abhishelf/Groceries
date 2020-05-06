@@ -21,7 +21,6 @@ class _SplashPageState extends State<SplashPage>
   GroceryPresenter _groceryPresenter;
   List<Grocery> _groceryList;
 
-  bool _isLoading = true;
   bool _isTimerFinished = false;
   bool _isUserAuthenticated;
 
@@ -85,15 +84,10 @@ class _SplashPageState extends State<SplashPage>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 50.0,
-                        child: Image(
-                          //FIXME change logo of app
-                          image: AssetImage("images/apple.jpg"),
-                          height: 50.0,
-                          width: 50.0,
-                        ),
+                      Image(
+                        image: AssetImage("images/logo.png"),
+                        height: 70.0,
+                        width: 70.0,
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 10.0),
@@ -145,9 +139,9 @@ class _SplashPageState extends State<SplashPage>
   _showErrorSnackBar() {
     _scaffoldKey.currentState.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Please Check Your Connection"),
+      content: Text(ERROR_NETWORK),
       action: SnackBarAction(
-        label: "Retry",
+        label: BUTTON_RETRY,
         onPressed: () {
           _groceryPresenter.loadGroceryList();
           _scaffoldKey.currentState.removeCurrentSnackBar();
@@ -167,7 +161,6 @@ class _SplashPageState extends State<SplashPage>
   void onLoadGrocery(List<Grocery> groceryList) {
     _groceryList = groceryList;
     if (_isTimerFinished) {
-      _isLoading = false;
       if (_isUserAuthenticated) {
         MyNavigator.goToHomePage(context, _groceryList);
       } else {

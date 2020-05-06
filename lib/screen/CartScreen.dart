@@ -120,7 +120,7 @@ class _CartScreenState extends State<CartScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Total : " + RS + _getTotalPrice(),
+                  TOTAL + RS + _getTotalPrice(),
                   style: TextStyle(
                     color: Colors.blueGrey,
                     fontWeight: FontWeight.bold,

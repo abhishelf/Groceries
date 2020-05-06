@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +36,7 @@ class _ShopPageState extends State<ShopPage> {
   List<String> _cart = List();
   List<Step> step;
 
-  String _errorMsg = "Order Not Placed";
+  String _errorMsg = TEXT_ORDER_NOT_PLACED;
   String _paymentId = "";
 
   next() {
@@ -148,7 +144,7 @@ class _ShopPageState extends State<ShopPage> {
 
   void _onlinePayment(){
     var options = {
-      'key': TEST_KEY_ID,
+      'key': razorPayKeyId,
       'amount': _priceToPay*100,
       'name': APP_TITLE,
       'description': TEXT_PAYMENT_DESCRIPTION,
@@ -361,7 +357,7 @@ class _ShopPageState extends State<ShopPage> {
                 SizedBox(
                   width: double.infinity,
                   child: Text(
-                    (_paymentId.isEmpty ? ".":"Keep It For Reference : "+_paymentId),
+                    (_paymentId.isEmpty ? ".":INFO_REF+_paymentId),
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 14.0,),
@@ -387,13 +383,13 @@ class _ShopPageState extends State<ShopPage> {
                 MaterialButton(
                   onPressed: onStepContinue,
                   color: Colors.blue,
-                  child: _currentIndex != 1 ? Text("Continue",style: TextStyle(color: Colors.white),) : Text("Online",style: TextStyle(color: Colors.white),),
+                  child: _currentIndex != 1 ? Text(BUTTON_CONTINUE,style: TextStyle(color: Colors.white),) : Text(BUTTON_ONLINE,style: TextStyle(color: Colors.white),),
                 ),
                 Padding(padding: EdgeInsets.only(right: 16.0),),
                 MaterialButton(
                   onPressed: onStepCancel,
                   color:_currentIndex != 1?Colors.white: Colors.blue,
-                  child: _currentIndex != 1 ? Text("Cancel") : Text("Cash On Delivery",style: TextStyle(color: Colors.white),),
+                  child: _currentIndex != 1 ? Text(BUTTON_CANCEL) : Text(BUTTON_COD,style: TextStyle(color: Colors.white),),
                 ),
               ],
             );

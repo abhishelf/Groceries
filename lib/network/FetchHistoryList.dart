@@ -12,9 +12,7 @@ class FetchHistoryList extends HistoryRepository {
 
     await Firestore.instance.collection("orders").getDocuments().then((QuerySnapshot snapshot){
       try {
-        print(email.trim());
         snapshot.documents.forEach((f) {
-          print(f.documentID.split("#")[0].trim());
          if(f.documentID.split("#")[0].trim() == email.trim()){
            for(int i=0;i<f.data['cart'].length;i++){
              List<String> splt = f.data['cart'][i].split("@");
@@ -25,7 +23,8 @@ class FetchHistoryList extends HistoryRepository {
                quantity: splt[3],
                image: splt[4],
                date: f.data['date'],
-               id: f.documentID
+               id: f.documentID,
+               status: f.data['status'],
              );
              list.add(history);
            }

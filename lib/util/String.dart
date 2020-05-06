@@ -1,7 +1,9 @@
-const String APP_TITLE = "Aahar Purti";
-const String TEST_KEY_ID = "rzp_test_P690XS0F7piecv";
-const String TEST_KEY_SECRET = "jchluLbZan5SDxXykAMfjYte";
+import 'DependencyInjection.dart';
+import 'Key.dart';
 
+const String APP_TITLE = "Aahar Purti";
+final String razorPayKeyId = Injector.getFlavor() == Flavor.MOCK ? TEST_KEY_ID : LIVE_KEY_ID;
+final String razorPayKeySecret = Injector.getFlavor() == Flavor.MOCK ? TEST_KEY_SECRET : LIVE_KEY_SECRET;
 
 const String RS = "₹ ";
 const String TOTAL = "Total : ";
@@ -33,6 +35,11 @@ const String BUTTON_LOGIN = "Sign in";
 const String BUTTON_SIGNUP_IN_LOGIN = "Don't have an account?  ";
 const String BUTTON_SIGNUP = "Sign up";
 const String BUTTON_LOGIN_IN_SIGNUP = "Already Have An Account?  ";
+const String BUTTON_RETRY = "Retry";
+const String BUTTON_CONTINUE = "Continue";
+const String BUTTON_CANCEL = "Cancel";
+const String BUTTON_COD = "Cash On Delivery";
+const String BUTTON_ONLINE = "Online";
 
 const String TEXT_PROCEED_CART = "Continue";
 const String TEXT_ADD_TO_CART = "Add To Cart";
@@ -40,8 +47,12 @@ const String TEXT_CART_EMPTY = "Your Cart Is Empty";
 const String TEXT_WISHLIST_EMPTY = "You Do Not Added Any Item Yet";
 const String TEXT_ORDER_PLACING = "Placing Your Order";
 const String TEXT_ORDER_PLACED = "Order Placed";
+const String TEXT_ORDER_NOT_PLACED = "Order Not Placed";
 const String TEXT_COD = "Cash On Delivery";
 const String TEXT_PAYMENT_DESCRIPTION = "Pay To Place Your Order";
+
+const String INFO_CHECK_MAIL = "Check Mail For Further Process";
+const String INFO_REF = "Keep It For Reference : ";
 
 const String ERROR_NONE = "Nothing to show here";
 const String ERROR_EMAIL = "Enter valid email";
@@ -50,6 +61,8 @@ const String ERROR_LOGIN = "Login Failed !!!";
 const String ERROR_SIGNUP = "Signup Failed";
 const String ERROR_ORDER = "Sorry For Inconvenience\n Error While Placing Order!\nYou can continue with your cart";
 const String ERROR_VALID = "Enter Valid Detail";
+const String ERROR_NETWORK = "Please Check Your Connection";
+const String ERROR_SENDING_LINK = "Error While Sending Reset Link";
 
 const String COL_ID = "id";
 const String COL_IMAGE = "image";

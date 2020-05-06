@@ -142,6 +142,7 @@ class _HistoryPageState extends State<HistoryPage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
+                            _historyList[index].status == "0" ? Icon(Icons.local_shipping,color: Colors.orange,) : Icon(Icons.done_all,color: Colors.green,),
                             Text(
                               "Q : " + _historyList[index].q,
                               style: TextStyle(

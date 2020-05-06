@@ -6,6 +6,7 @@ class History {
   String q;
   String price;
   String date;
+  String status;
 
   History(
       {this.id,
@@ -14,7 +15,8 @@ class History {
       this.quantity,
       this.q,
       this.price,
-      this.date});
+      this.date,
+      this.status});
 }
 
 abstract class HistoryRepository {
