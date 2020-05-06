@@ -39,3 +39,4 @@ lib/generated_plugin_registrant.dart
 # firebase
 /android/app/google-services.json
 /lib/util/Key.dart
+/android/key.properties
